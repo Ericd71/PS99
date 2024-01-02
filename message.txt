@@ -68,6 +68,15 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     if shiny then
         snipeMessage = snipeMessage .. " Shiny "
     end
+
+    pcall(function()
+        type = Library.Directory.Pets[item]
+    end)
+
+    if type.huge then
+	snipeMessage = snipeMessage .. " Huge "
+	print("Successfully sniped huge!")
+    end
     
     snipeMessage = snipeMessage .. item .. "**"
     
