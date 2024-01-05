@@ -182,7 +182,7 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
 		snipeNormal = false
                     
                 print(string.format("%s listed %s %s - %s gems, %s gems/unit", tostring(username), tostring(amount), tostring(item), tostring(gems), tostring(unitGems)))                
-                if string.find(item, "Huge") and unitGems <= 4000000 then
+                if string.find(item, "Huge") and unitGems <= 1000000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, ping, snipeNormal)
                     return
                 elseif snipeNormalPets == true and gems == 1 then
@@ -198,7 +198,7 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                         ping = true
 			coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, ping, snipeNormal)
                         return
-                    elseif type.huge and unitGems <= 3000000 then
+                    elseif type.huge and unitGems <= 4000000 then
                         ping = true
 			coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, ping, snipeNormal)
                         return
