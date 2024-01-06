@@ -198,7 +198,7 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                         ping = true
 			coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, ping, snipeNormal)
                         return
-                    elseif type.huge and unitGems <= 4000000 then
+                    elseif type.huge and unitGems <= 2500000 then
                         ping = true
 			coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, ping, snipeNormal)
                         return
