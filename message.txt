@@ -3,6 +3,8 @@ Credits List
 ethereum: creating the base sniper
 chocolog: providing type.huge
 Edmond: offered tips for optimization
+
+it is very recommended to fork this and made your own config
 ]]--
 
 local osclock = os.clock()
@@ -42,7 +44,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     local weburl, webContent, webcolor
     local versionVal = { [1] = "Golden ", [2] = "Rainbow " }
     local versionStr = versionVal[version] or (version == nil and "")
-    local mention = (string.find(item, "Huge") or string.find(item, "Titanic")) and "<@" .. userid .. ">" or ""
+    local mention = (Library.Directory.Pets[item].huge or Library.Directory.Pets[item].titanic) and "<@" .. userid .. ">" or ""
 	
     if boughtStatus then
 	webcolor = tonumber(0x00ff00)
@@ -77,7 +79,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         ['embeds'] = {
             {
 		["author"] = {
-			["name"] = "Luna 🌚",
+			["name"] = "Boor Sniper 🌚",
 			["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&",
 		},
                 ['title'] = snipeMessage,
@@ -131,7 +133,7 @@ end
 
 local function tryPurchase(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
     if buytimestamp > listTimestamp then
-      task.wait(3.4 - Players.LocalPlayer:GetNetworkPing())
+	task.wait(buytimestamp - listTimestamp - Players.LocalPlayer:GetNetworkPing())
     end
     local boughtPet, boughtMessage = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
     processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, class, boughtMessage, snipeNormal)
@@ -166,11 +168,11 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                 local class = tostring(listing["ItemData"]["class"])
                 local unitGems = gems/amount
 		snipeNormal = false
-                                 
-                if string.find(item, "Huge") and unitGems <= 100000 then
+				
+                if string.find(item, "Huge") and unitGems <= 1000000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
-		elseif string.find(item, "Charm") and unitGems <= 30000 then
+		elseif string.find(item, "Charm") and unitGems <= 10000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
                 elseif snipeNormalPets == true and gems == 1 then
@@ -185,26 +187,26 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                     elseif type.titanic and unitGems <= 10000000 then
 			coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
-                    elseif type.huge and unitGems <= 2500000 then
+                    elseif type.huge and unitGems <= 3000000 then
 			coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
 		    end
-                elseif (item == "Titanic Christmas Present" or string.find(item, "2024 New Year")) and unitGems <= 50000 then
+                elseif (item == "Titanic Christmas Present" or string.find(item, "2024 New Year")) and unitGems <= 40000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
-		elseif class == "Charm" and unitGems <= 50000 then
+		elseif class == "Charm" and unitGems <= 100000 then
 		    if not string.find(item, "Coins") and not string.find(item, "Agility") and not string.find(item, "Bonus") then
                     	coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     	return
 	            end
-                elseif class == "Egg" and unitGems <= 30000 then
+                elseif class == "Egg" and unitGems <= 300000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
-                elseif ((string.find(item, "Key") and not string.find(item, "Lower")) or string.find(item, "Ticket")) and unitGems <= 3000 then 
+                elseif ((string.find(item, "Key") and not string.find(item, "Lower")) or string.find(item, "Ticket")) and unitGems <= 2500 then 
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
-                elseif class == "Diamond Chest Mimic" and unitGems <= 50000 then
-                    if item == "Fortune" then 
+                elseif class == "Enchant" and unitGems <= 200000 then
+                    if item == "F" then 
                         coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
                     elseif string.find(item, "Chest Mimic") then
@@ -216,7 +218,13 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                     elseif item == "Massive Comet" then
                         coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
-                    end
+		    elseif item == "Super Lightning" then
+                        coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
+                        return
+		    elseif item == "Shiny Hunter" then
+                        coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
+                        return
+	            end
                 end
             end
         end
@@ -286,7 +294,7 @@ Players.PlayerAdded:Connect(function(player)
     end
 end) 
 
-local hopDelay = math.random(720, 900)
+local hopDelay = math.random(720, 960)
 
 while task.wait(1) do
     if math.floor(os.clock() - osclock) >= hopDelay then
