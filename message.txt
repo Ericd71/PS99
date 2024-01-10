@@ -1,50 +1,44 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-local UpgradeUnitFunction = ReplicatedStorage:WaitForChild("Remote"):WaitForChild("UpgradeUnit")
+local function spawnUnitRepeatedly()
+    local unitNames = {"MageChild"}
+    local spawnPosition = Vector3.new(-113.44709, 175.723358, 1082.33679)  -- Belirtilen konum
 
-local function upgradeAllUnits()
-    local UnitsFolder = workspace:WaitForChild("Units")
+    for _, unitName in pairs(unitNames) do
+        local args = {
+            [1] = unitName,
+            [2] = CFrame.new(spawnPosition),
+            [3] = 1,
+            [4] = {
+                [1] = "1",
+                [2] = "1",
+                [3] = "1",
+                [4] = "1"
+            }
+        }
 
-    for _, unit in pairs(UnitsFolder:GetChildren()) do
+        print("Attempting to spawn unit:", unitName)
+
         local success, errorMessage = pcall(function()
-            UpgradeUnitFunction:InvokeServer(unit)
+            local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("SpawnUnit")
+            if remote then
+                remote:InvokeServer(unpack(args))
+            else
+                error("Remote not found!")
+            end
         end)
 
         if not success then
-            warn("UpgradeUnit çağrısı başarısız: " .. errorMessage)
-        end
-    end
-end
-
-local function trackAndUpgradeUnits()
-    local UnitsFolder = workspace:WaitForChild("Units")
-
-    local function onUnitAdded(newUnit)
-        local success, errorMessage = pcall(function()
-            UpgradeUnitFunction:InvokeServer(newUnit)
-        end)
-
-        if not success then
-            warn("UpgradeUnit çağrısı başarısız (Yeni birim eklenirken): " .. errorMessage)
+            warn("SpawnUnit call failed for " .. unitName .. ": " .. errorMessage)
+        else
+            print("SpawnUnit call successful for " .. unitName)
         end
     end
 
-    local function onUnitRemoved(removedUnit)
-        -- Birim kaldırıldığında, şu anda herhangi bir şey yapmamıza gerek yok
-    end
-
-    UnitsFolder.ChildAdded:Connect(onUnitAdded)
-    UnitsFolder.ChildRemoved:Connect(onUnitRemoved)
+    wait(0.5)  -- Bekleme süresi 0.5 saniye olarak güncellendi
+    spawnUnitRepeatedly()
 end
 
--- Her 0.5 saniyede bir bütün birimleri upgrade et
-while wait(0.5) do
-    local success, errorMessage = pcall(upgradeAllUnits)
-
-    if not success then
-        warn("upgradeAllUnits çağrısı başarısız: " .. errorMessage)
-    end
-end
-
--- Units klasöründeki birimleri takip et ve yeni birim eklenirse upgrade et
-trackAndUpgradeUnits()
+spawnUnitRepeatedly()
