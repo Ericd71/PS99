@@ -1,24 +1,43 @@
+wait(1)  
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local remoteEvent = ReplicatedStorage:WaitForChild("Remote"):WaitForChild("SkipEvent")
+
+while true do
+    remoteEvent:FireServer()
+    wait(1)
+end
+
+-- Timer
+wait(3)
+
+local args = {
+    [1] = "x2 Speed"
+}
+
+-- x2Event'i çalıştır
+local success, errorMessage = pcall(function()
+    local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("x2Event")
+    if remote then
+        remote:FireServer(unpack(args))
+        print("x2Event call successful")
+    else
+        error("Remote not found!")
+    end
+end)
+
+if not success then
+    warn("x2Event hata: " .. errorMessage)
+end
+
 -- SkipEvent'i çalıştır
-wait(10)
+wait(3)
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local remoteEvent = ReplicatedStorage:WaitForChild("Remote"):WaitForChild("SkipEvent")
 
 while true do
     remoteEvent:FireServer()
-    wait(5)
+    wait(1)
 end
-
--- AutoSkip fonksiyonunu çağır
-local argsAutoSkip = {
-    [1] = "AutoSkip"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Setting"):FireServer(unpack(argsAutoSkip))
-
--- x2 Speed fonksiyonunu çağır
-local argsX2Speed = {
-    [1] = "x1 Speed"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("x2Event"):FireServer(unpack(argsX2Speed))
